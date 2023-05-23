@@ -14,17 +14,20 @@ import { BsMoon, BsSun } from "react-icons/bs";
 import "../styles/Chat.css";
 
 export const Chat = ({ room }) => {
-  const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState("");
-  const [darkMode, setDarkMode] = useState(false);
-  const messagesRef = collection(db, "messages");
+  const [messages, setMessages] = useState([]); // Store the messages
+  const [newMessage, setNewMessage] = useState(""); // Store the new message
+  const [darkMode, setDarkMode] = useState(false); // Toggle dark mode
+  const messagesRef = collection(db, "messages"); // Reference to the "messages" collection in Firestore
 
   useEffect(() => {
+    // Query the messages collection based on the room and order them by createdAt
     const queryMessages = query(
       messagesRef,
       where("room", "==", room),
       orderBy("createdAt")
     );
+
+    // Set up a snapshot listener to listen for changes in the messages collection
     const unsubscribe = onSnapshot(queryMessages, (snapshot) => {
       let messages = [];
       snapshot.forEach((doc) => {
@@ -33,6 +36,7 @@ export const Chat = ({ room }) => {
       setMessages(messages);
     });
 
+    // Clean up the listener when the component unmounts
     return () => unsubscribe();
   }, []);
 
@@ -40,6 +44,8 @@ export const Chat = ({ room }) => {
     event.preventDefault();
 
     if (newMessage === "") return;
+
+    // Add a new document to the messages collection with the new message
     await addDoc(messagesRef, {
       text: newMessage,
       createdAt: serverTimestamp(),
@@ -47,11 +53,11 @@ export const Chat = ({ room }) => {
       room,
     });
 
-    setNewMessage("");
+    setNewMessage(""); // Clear the new message input
   };
 
   const toggleDarkMode = () => {
-    setDarkMode((prevDarkMode) => !prevDarkMode);
+    setDarkMode((prevDarkMode) => !prevDarkMode); // Toggle the darkMode state
   };
 
   return (
