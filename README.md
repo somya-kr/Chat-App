@@ -2,10 +2,6 @@
 
 This documentation provides a step-by-step guide for installing and deploying a realtime chat app developed using React and Firebase. The app allows users to chat in real-time and is built using React for the frontend and Firebase for the backend.
 
-## Installation
-
-To install the realtime chat app, follow the steps below:
-
 ### Prerequisites
 
 Before proceeding with the installation, ensure that you have the following prerequisites installed:
